@@ -1,0 +1,124 @@
+# Invoice Number Formatter
+
+A lightweight PrestaShop module that lets you customize the format of invoice numbers using configurable placeholders.
+
+The module adds a simple configuration page where you can define your own invoice number pattern and the minimum number length without modifying PrestaShop core files.
+
+## Features
+
+- Custom invoice number format
+- Configurable minimum invoice number length
+- Uses the configured PrestaShop invoice prefix
+- Simple back office configuration
+- No core modifications required
+- Lightweight and easy to use
+
+## Available Placeholders
+
+| Placeholder | Description |
+|-------------|-------------|
+| `{prefix}` | Invoice prefix configured in PrestaShop |
+| `{year}` | Current two-digit year |
+| `{number}` | Formatted invoice number |
+
+## Examples
+
+Pattern:
+
+```text
+{prefix}{year}{number}
+```
+
+Result:
+
+```text
+INV250001
+```
+
+Pattern:
+
+```text
+{year}-{number}
+```
+
+Result:
+
+```text
+25-0001
+```
+
+Pattern:
+
+```text
+INV-{number}
+```
+
+Result:
+
+```text
+INV-0001
+```
+
+## Installation
+
+1. Download or clone this repository.
+2. Copy the `invoicenumberformatter` folder into your PrestaShop `modules` directory.
+3. Open the PrestaShop Back Office.
+4. Go to **Modules > Module Manager**.
+5. Install **Invoice Number Formatter**.
+6. Configure the desired invoice number pattern.
+
+## Configuration
+
+The module provides two settings:
+
+### Pattern
+
+Defines the invoice number format.
+
+Default:
+
+```text
+{prefix}{year}{number}
+```
+
+### Minimum Number Digits
+
+Defines the minimum number of digits used for the invoice number.
+
+Example:
+
+| Value | Output |
+|------:|--------|
+| 2 | 01 |
+| 4 | 0001 |
+| 6 | 000001 |
+
+## Compatibility
+
+Tested with:
+
+- PrestaShop 9.1.x
+
+## Roadmap
+
+Planned improvements include:
+
+- Use invoice creation year instead of current year
+- Additional placeholders
+- Translation support
+- More formatting options
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 (GPL-3.0).
+
+You are free to use, modify and redistribute this software under the terms of the GPL-3.0 license.
+
+See the LICENSE file for details.
+
+## Contributing
+
+Pull requests, bug reports and feature requests are welcome.
+
+If you find a bug or have an idea for improvement, please open an issue on GitHub.

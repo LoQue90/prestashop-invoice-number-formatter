@@ -1,0 +1,37 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Composer
+/vendor/
+composer.lock
+
+# PrestaShop cache (falls Modul im Shop-Verzeichnis entwickelt wird)
+cache/
+var/cache/
+var/logs/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Build / archive files
+*.zip
+*.tar.gz
+
+# Environment files
+.env
+.env.*
+
+# Test files
+.phpunit.result.cache
