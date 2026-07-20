@@ -14,15 +14,16 @@ The original invoice number stored in the database is not changed.
 
 * Custom invoice number format
 * Configurable format pattern
+* Pattern validation
+* Backend preview of the generated invoice number format
 * Automatic year detection from the invoice date
 * Supports invoice prefixes configured in PrestaShop
 * Configurable minimum number length
-* Works with PrestaShop invoice display
 * No database changes required
 
 ## Requirements
 
-* PrestaShop 9.x
+* PrestaShop 9.1.x
 * PHP version supported by your PrestaShop installation
 
 ## Installation
@@ -43,6 +44,7 @@ Modules → Module Manager → Invoice Number Formatter → Install
 
 ## Configuration
 
+The module configuration page shows a preview of the generated invoice number based on the current settings.
 The module provides two configuration options:
 
 ### Pattern

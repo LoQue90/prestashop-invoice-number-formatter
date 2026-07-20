@@ -12,7 +12,7 @@ class InvoiceNumberFormatter extends Module
     public function __construct()
     {
         $this->name = 'invoicenumberformatter';
-        $this->version = '1.1.0';
+        $this->version = '1.2.0';
         $this->author = 'Lorenz Uhlig';
 
         $this->tab = 'administration';
@@ -62,19 +62,42 @@ class InvoiceNumberFormatter extends Module
 
         if (Tools::isSubmit('submitInvoiceFormatter')) {
 
-            Configuration::updateValue(
-                'INF_PATTERN',
-                Tools::getValue('INF_PATTERN')
+            $pattern = Tools::getValue(
+                'INF_PATTERN'
             );
 
-            Configuration::updateValue(
-                'INF_MIN_DIGITS',
-                (int) Tools::getValue('INF_MIN_DIGITS')
+
+            $validationError = $this->validatePattern(
+                $pattern
             );
 
-            $output .= $this->displayConfirmation(
-                $this->l('Settings saved.')
-            );
+
+            if ($validationError) {
+
+                $output .= $this->displayError(
+                    $validationError
+                );
+
+            } else {
+
+                Configuration::updateValue(
+                    'INF_PATTERN',
+                    $pattern
+                );
+
+
+                Configuration::updateValue(
+                    'INF_MIN_DIGITS',
+                    (int) Tools::getValue(
+                        'INF_MIN_DIGITS'
+                    )
+                );
+
+
+                $output .= $this->displayConfirmation(
+                    $this->l('Settings saved.')
+                );
+            }
         }
 
 
@@ -114,6 +137,12 @@ class InvoiceNumberFormatter extends Module
                         'name' => 'INF_MIN_DIGITS',
                     ],
 
+                    [
+                        'type' => 'html',
+                        'name' => 'INF_PREVIEW',
+                        'html_content' => $this->getPreview(),
+                    ],
+
                 ],
 
                 'submit' => [
@@ -130,9 +159,11 @@ class InvoiceNumberFormatter extends Module
 
         $helper->module = $this;
         $helper->name_controller = $this->name;
+
         $helper->token = Tools::getAdminTokenLite(
             'AdminModules'
         );
+
 
         $helper->currentIndex =
             AdminController::$currentIndex .
@@ -145,17 +176,116 @@ class InvoiceNumberFormatter extends Module
 
 
         $helper->fields_value = [
+
             'INF_PATTERN' =>
-                Configuration::get('INF_PATTERN'),
+                Configuration::get(
+                    'INF_PATTERN'
+                ),
 
             'INF_MIN_DIGITS' =>
-                Configuration::get('INF_MIN_DIGITS'),
+                Configuration::get(
+                    'INF_MIN_DIGITS'
+                ),
         ];
 
 
-        return $helper->generateForm(
-            [$fieldsForm]
+        $this->context->controller->addJS(
+            $this->_path . 'views/js/admin.js'
         );
+
+
+        Media::addJsDef([
+            'invoicePrefix' =>
+                Configuration::get(
+                    'PS_INVOICE_PREFIX',
+                    (int) $this->context->language->id
+                ),
+        ]);
+
+
+        return $helper->generateForm(
+            [
+                $fieldsForm
+            ]
+        );
+    }
+
+
+    private function getPreview()
+    {
+        $formatter = new InvoiceFormatter();
+
+        $preview = $formatter->format(
+            14,
+            [
+                'pattern' => Configuration::get(
+                    'INF_PATTERN'
+                ),
+
+                'min_digits' => Configuration::get(
+                    'INF_MIN_DIGITS'
+                ),
+            ]
+        );
+
+
+        return '
+            <div class="alert alert-info">
+                <strong>'
+                . $this->l('Preview')
+                . ':</strong>
+                <span id="invoice-preview">'
+                . htmlspecialchars(
+                    $preview
+                )
+                . '</span>
+            </div>
+        ';
+    }
+
+
+    private function validatePattern($pattern)
+    {
+        if (strpos($pattern, '{number}') === false) {
+
+            return $this->l(
+                'The pattern must contain {number}.'
+            );
+        }
+
+
+        preg_match_all(
+            '/\{([^}]+)\}/',
+            $pattern,
+            $matches
+        );
+
+
+        $allowed = [
+            'prefix',
+            'year',
+            'number',
+        ];
+
+
+        foreach ($matches[1] as $placeholder) {
+
+            if (!in_array(
+                $placeholder,
+                $allowed
+            )) {
+
+                return sprintf(
+                    $this->l(
+                        'Unknown placeholder: {%s}'
+                    ),
+                    $placeholder
+                );
+            }
+        }
+
+
+        return false;
     }
 
 
@@ -165,7 +295,9 @@ class InvoiceNumberFormatter extends Module
             return '';
         }
 
+
         $formatter = new InvoiceFormatter();
+
 
         return $formatter->format(
             (int) $params['number'],
