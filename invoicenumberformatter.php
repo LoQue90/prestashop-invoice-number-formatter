@@ -12,8 +12,8 @@ class InvoiceNumberFormatter extends Module
     public function __construct()
     {
         $this->name = 'invoicenumberformatter';
-        $this->version = '1.0.0';
-        $this->author = 'Open Source';
+        $this->version = '1.1.0';
+        $this->author = 'Lorenz Uhlig';
 
         $this->tab = 'administration';
         $this->need_instance = 0;

@@ -1,110 +1,167 @@
-# Invoice Number Formatter
+# PrestaShop Invoice Number Formatter
 
-A lightweight PrestaShop module that lets you customize the format of invoice numbers using configurable placeholders.
+A lightweight PrestaShop module to customize the displayed invoice number format.
 
-The module adds a simple configuration page where you can define your own invoice number pattern and the minimum number length without modifying PrestaShop core files.
+The module replaces the default PrestaShop invoice number output with a configurable format based on:
+
+* invoice prefix
+* invoice year
+* invoice number
+
+The original invoice number stored in the database is not changed.
 
 ## Features
 
-- Custom invoice number format
-- Configurable minimum invoice number length
-- Uses the configured PrestaShop invoice prefix
-- Simple back office configuration
-- No core modifications required
-- Lightweight and easy to use
+* Custom invoice number format
+* Configurable format pattern
+* Automatic year detection from the invoice date
+* Supports invoice prefixes configured in PrestaShop
+* Configurable minimum number length
+* Works with PrestaShop invoice display
+* No database changes required
 
-## Available Placeholders
+## Requirements
 
-| Placeholder | Description |
-|-------------|-------------|
-| `{prefix}` | Invoice prefix configured in PrestaShop |
-| `{year}` | Current two-digit year |
-| `{number}` | Formatted invoice number |
-
-## Examples
-
-Pattern:
-
-```text
-{prefix}{year}{number}
-```
-
-Result:
-
-```text
-INV250001
-```
-
-Pattern:
-
-```text
-{year}-{number}
-```
-
-Result:
-
-```text
-25-0001
-```
-
-Pattern:
-
-```text
-INV-{number}
-```
-
-Result:
-
-```text
-INV-0001
-```
+* PrestaShop 9.x
+* PHP version supported by your PrestaShop installation
 
 ## Installation
 
-1. Download or clone this repository.
-2. Copy the `invoicenumberformatter` folder into your PrestaShop `modules` directory.
-3. Open the PrestaShop Back Office.
-4. Go to **Modules > Module Manager**.
-5. Install **Invoice Number Formatter**.
-6. Configure the desired invoice number pattern.
+1. Copy the module folder into:
+
+```
+/modules/invoicenumberformatter
+```
+
+2. Install the module in the PrestaShop backend:
+
+```
+Modules → Module Manager → Invoice Number Formatter → Install
+```
+
+3. Open the module configuration page and set your desired format.
 
 ## Configuration
 
-The module provides two settings:
+The module provides two configuration options:
 
 ### Pattern
 
 Defines the invoice number format.
 
-Default:
+Available placeholders:
 
-```text
-{prefix}{year}{number}
-```
-
-### Minimum Number Digits
-
-Defines the minimum number of digits used for the invoice number.
+| Placeholder | Description               |
+| ----------- | ------------------------- |
+| `{prefix}`  | PrestaShop invoice prefix |
+| `{year}`    | Two digit invoice year    |
+| `{number}`  | Formatted invoice number  |
 
 Example:
 
-| Value | Output |
-|------:|--------|
-| 2 | 01 |
-| 4 | 0001 |
-| 6 | 000001 |
+```
+{prefix}{year}{number}
+```
 
-## Compatibility
+Result:
 
-Tested with:
+```
+VTU2614
+```
 
-- PrestaShop 9.1.x
+Another example:
+
+```
+{prefix}-{year}-{number}
+```
+
+Result:
+
+```
+VTU-26-0014
+```
+
+### Minimum number digits
+
+Defines the minimum length of the invoice number.
+
+Example:
+
+```
+4
+```
+
+Invoice number:
+
+```
+14
+```
+
+Result:
+
+```
+0014
+```
+
+## Year handling
+
+The year is calculated from the invoice creation date.
+
+Example:
+
+Invoice date:
+
+```
+2025-02-10
+```
+
+Result:
+
+```
+VTU2514
+```
+
+Invoice date:
+
+```
+2026-07-20
+```
+
+Result:
+
+```
+VTU2614
+```
+
+This ensures that invoices remain correctly formatted even when historical invoices from previous years are displayed.
+
+## Technical information
+
+The module uses the PrestaShop hook:
+
+```
+actionInvoiceNumberFormatted
+```
+
+The original invoice number remains unchanged in the database.
+
+The module only modifies the displayed formatted invoice number.
+
+## File structure
+
+```
+invoicenumberformatter/
+│
+├── invoicenumberformatter.php
+│
+└── src/
+    └── Formatter.php
+```
 
 ## Roadmap
 
 Planned improvements include:
 
-- Use invoice creation year instead of current year
 - Additional placeholders
 - Translation support
 - More formatting options

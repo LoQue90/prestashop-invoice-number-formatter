@@ -2,7 +2,7 @@
 
 class InvoiceFormatter
 {
-    public function format($number)
+    public function format($number, $params = [])
     {
         $pattern = Configuration::get(
             'INF_PATTERN'
@@ -33,6 +33,16 @@ class InvoiceFormatter
 
         $year = date('y');
 
+            if (
+            isset($params['OrderInvoice'])
+            && $params['OrderInvoice'] instanceof OrderInvoice
+            && !empty($params['OrderInvoice']->date_add)
+        ) {
+            $year = date(
+                'y',
+                strtotime($params['OrderInvoice']->date_add)
+            );
+        }
 
         $formattedNumber = str_pad(
             (string) $number,
