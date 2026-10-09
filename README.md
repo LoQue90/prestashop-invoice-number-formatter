@@ -37,12 +37,12 @@ Available placeholders:
 | `{year}` | Two-digit year of the invoice's creation date. |
 | `{number}` | Invoice number, padded to the configured minimum length. |
 
-For prefix `VTU`, invoice number `14`, and an invoice created in 2026:
+For prefix `RE`, invoice number `14`, and an invoice created in 2026:
 
 | Pattern | Minimum digits | Result |
 | --- | --- | --- |
-| `{prefix}{year}{number}` | 2 | `VTU2614` |
-| `{prefix}-{year}-{number}` | 4 | `VTU-26-0014` |
+| `{prefix}{year}{number}` | 2 | `RE2614` |
+| `{prefix}-{year}-{number}` | 4 | `RE-26-0014` |
 
 An invoice created in 2025 retains `25` as its year. The configuration preview uses the current year because it has no invoice date.
 
