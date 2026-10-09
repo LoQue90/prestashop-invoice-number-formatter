@@ -35,3 +35,5 @@ var/logs/
 
 # Test files
 .phpunit.result.cache
+# Python packaging helper cache
+__pycache__/

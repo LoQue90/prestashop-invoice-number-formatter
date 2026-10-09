@@ -12,7 +12,11 @@ class InvoiceNumberFormatter extends Module
     public function __construct()
     {
         $this->name = 'invoicenumberformatter';
-        $this->version = '1.2.0';
+        $this->version = '1.2.1';
+        $this->ps_versions_compliancy = [
+            'min' => '9.1.0',
+            'max' => '9.1.5',
+        ];
         $this->author = 'Lorenz Uhlig';
 
         $this->tab = 'administration';
